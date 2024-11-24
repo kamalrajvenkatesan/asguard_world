@@ -1,7 +1,9 @@
 import 'package:asgard_world/feature/map_preview/presenter/controller/map_preview_controller.dart';
 import 'package:asgard_world/utility/enum/map_view_option.dart';
+import 'package:asgard_world/utility/extension/widget_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapPreviewScreen extends StatelessWidget {
   const MapPreviewScreen({super.key});
@@ -14,13 +16,23 @@ class MapPreviewScreen extends StatelessWidget {
           value: view, icon: Icon(view.buttonIcon));
     }
 
-    return SegmentedButton<MapViewOption>(segments: [
-      getButtonSegment(MapViewOption.cycle),
-      getButtonSegment(MapViewOption.shopping),
-      getButtonSegment(MapViewOption.resturant),
-    ], selected: {
-      selected
-    });
+    return Container(
+      height: 60,
+      alignment: Alignment.bottomLeft,
+      padding: const EdgeInsets.only(left: 20, bottom: 8),
+      child: SegmentedButton<MapViewOption>(
+        segments: [
+          getButtonSegment(MapViewOption.cycle),
+          getButtonSegment(MapViewOption.shopping),
+          getButtonSegment(MapViewOption.resturant),
+        ],
+        selected: <MapViewOption>{selected},
+        showSelectedIcon: false,
+        onSelectionChanged: (value) {
+          onSelection(value.first);
+        },
+      ),
+    );
   }
 
   @override
@@ -29,15 +41,19 @@ class MapPreviewScreen extends StatelessWidget {
         init: MapPreviewController(),
         builder: (controller) {
           return Scaffold(
-            extendBodyBehindAppBar: true,
             appBar: AppBar(
-              backgroundColor: Colors.transparent,
               elevation: 0,
-              title: const Text("Explore Map"),
+              title: Text(controller.selectedValue.title),
             ),
             floatingActionButton: _segmentSelectorWidget(
                 onSelection: controller.updateMapViewSelection,
                 selected: controller.selectedValue),
+            body: GoogleMap(
+                mapType: MapType.hybrid,
+                initialCameraPosition: CameraPosition(
+                  target: controller.location,
+                  zoom: 14.4746,
+                )),
           );
         });
   }

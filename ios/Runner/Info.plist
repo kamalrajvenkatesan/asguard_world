@@ -45,5 +45,7 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Discover nearby restaurants, shops, and more. Allow location access for tailored recommendations.</string>
 </dict>
 </plist>
