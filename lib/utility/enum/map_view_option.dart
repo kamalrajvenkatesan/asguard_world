@@ -5,6 +5,17 @@ enum MapViewOption {
   shopping,
   resturant;
 
+  String get typeString {
+    switch (this) {
+      case MapViewOption.cycle:
+        return "cycle";
+      case MapViewOption.shopping:
+        return "shopping";
+      case MapViewOption.resturant:
+        return "resturant";
+    }
+  }
+
   String get title {
     switch (this) {
       case MapViewOption.cycle:

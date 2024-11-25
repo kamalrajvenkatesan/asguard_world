@@ -1,6 +1,5 @@
 import 'package:asgard_world/feature/map_preview/presenter/controller/map_preview_controller.dart';
 import 'package:asgard_world/utility/enum/map_view_option.dart';
-import 'package:asgard_world/utility/extension/widget_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -49,11 +48,17 @@ class MapPreviewScreen extends StatelessWidget {
                 onSelection: controller.updateMapViewSelection,
                 selected: controller.selectedValue),
             body: GoogleMap(
-                mapType: MapType.hybrid,
-                initialCameraPosition: CameraPosition(
-                  target: controller.location,
-                  zoom: 14.4746,
-                )),
+              mapType: MapType.hybrid,
+              initialCameraPosition: CameraPosition(
+                target: controller.location ?? controller.defaultLoation,
+                zoom: 12,
+              ),
+              markers: controller.markers,
+              onMapCreated: (mapController) {
+                controller.mapController = mapController;
+                controller.setUserCurrentLocation();
+              },
+            ),
           );
         });
   }
