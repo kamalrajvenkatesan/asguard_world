@@ -1,3 +1,4 @@
+import 'package:asgard_world/feature/map_preview/data/model/places_model.dart';
 import 'package:asgard_world/feature/map_preview/data/request_model/places_request_model.dart';
 import 'package:asgard_world/feature/map_preview/domain/use_case/places_use_case.dart';
 import 'package:asgard_world/utility/enum/map_view_option.dart';
@@ -11,12 +12,12 @@ class MapPreviewController extends GetxController {
   LatLng? location;
   final defaultLoation = const LatLng(12.9716, 77.5946);
   GoogleMapController? mapController;
-  Set<Marker> markers = {};
+  List<PlacesModel>? places;
 
   void _updateMarkers() async {
     try {
       final selectedLocation = location ?? defaultLoation;
-      markers = await PlacesUseCase().call(PlacesRequestModel(
+      places = await PlacesUseCase().call(PlacesRequestModel(
           location:
               "${selectedLocation.latitude}, ${selectedLocation.longitude}",
           type: selectedValue.typeString));

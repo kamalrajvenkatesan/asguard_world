@@ -21,12 +21,16 @@ class PlacesModel {
   final String? placeId;
   final String? reference;
   final GeoMetryModel? geometry;
+  final String? vicinity;
+  final num? rating;
 
   PlacesModel({
     required this.name,
     required this.placeId,
     required this.reference,
     required this.geometry,
+    required this.vicinity,
+    required this.rating,
   });
 
   factory PlacesModel.fromJSON(Map<String, dynamic> json) {
@@ -37,6 +41,8 @@ class PlacesModel {
       geometry: GeoMetryModel.fromJSON(
         json["geometry"],
       ),
+      vicinity: json["vicinity"],
+      rating: json["rating"],
     );
   }
 }

@@ -1,11 +1,21 @@
+import 'package:asgard_world/feature/map_preview/data/model/places_model.dart';
 import 'package:asgard_world/feature/map_preview/presenter/controller/map_preview_controller.dart';
+import 'package:asgard_world/feature/map_preview/presenter/widget/place_detail_widget.dart';
 import 'package:asgard_world/utility/enum/map_view_option.dart';
+import 'package:asgard_world/utility/extension/places_model_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapPreviewScreen extends StatelessWidget {
   const MapPreviewScreen({super.key});
+
+  void _showPlacesDetailPopup(BuildContext context,
+          {required PlacesModel place}) =>
+      showDialog(
+          context: context,
+          builder: (context) =>
+              AlertDialog(content: PlaceDetailWidget(place: place)));
 
   Widget _segmentSelectorWidget(
       {required Function(MapViewOption) onSelection,
@@ -17,9 +27,21 @@ class MapPreviewScreen extends StatelessWidget {
 
     return Container(
       height: 60,
-      alignment: Alignment.bottomLeft,
+      alignment: Alignment.bottomCenter,
       padding: const EdgeInsets.only(left: 20, bottom: 8),
       child: SegmentedButton<MapViewOption>(
+        style: ButtonStyle(
+            foregroundColor: WidgetStateProperty.resolveWith((state) {
+          if (state.contains(WidgetState.selected)) {
+            return Colors.white;
+          }
+          return Colors.black;
+        }), backgroundColor: WidgetStateProperty.resolveWith((state) {
+          if (state.contains(WidgetState.selected)) {
+            return const Color(0xFF6a1e6f);
+          }
+          return Colors.white;
+        })),
         segments: [
           getButtonSegment(MapViewOption.cycle),
           getButtonSegment(MapViewOption.shopping),
@@ -53,7 +75,14 @@ class MapPreviewScreen extends StatelessWidget {
                 target: controller.location ?? controller.defaultLoation,
                 zoom: 12,
               ),
-              markers: controller.markers,
+              markers: controller.places
+                      ?.map((e) => e.toMarker(() {
+                            _showPlacesDetailPopup(context, place: e);
+                          }))
+                      .toList()
+                      .whereType<Marker>()
+                      .toSet() ??
+                  {},
               onMapCreated: (mapController) {
                 controller.mapController = mapController;
                 controller.setUserCurrentLocation();

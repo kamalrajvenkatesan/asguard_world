@@ -8,11 +8,11 @@ enum MapViewOption {
   String get typeString {
     switch (this) {
       case MapViewOption.cycle:
-        return "cycle";
+        return "bicycle_store";
       case MapViewOption.shopping:
-        return "shopping";
+        return "shopping_mall";
       case MapViewOption.resturant:
-        return "resturant";
+        return "restaurant";
     }
   }
 

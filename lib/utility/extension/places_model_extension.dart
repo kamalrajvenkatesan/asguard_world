@@ -2,7 +2,7 @@ import 'package:asgard_world/feature/map_preview/data/model/places_model.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 extension PlacesModelExtension on PlacesModel {
-  Marker? toMarker() {
+  Marker? toMarker(Function()? onTap) {
     if (geometry?.location == null) {
       return null;
     }
@@ -11,6 +11,7 @@ extension PlacesModelExtension on PlacesModel {
           name ?? DateTime.now().toString(),
         ),
         position: geometry!.location!,
-        infoWindow: InfoWindow(title: name));
+        infoWindow: InfoWindow(title: name),
+        onTap: onTap);
   }
 }
